@@ -35,30 +35,33 @@ int main() {
     World world;
     world.x0 = {0.0,0.0,0.0};		// origin for plotting
     world.dh = {0.02,0.02,0.02};	// cell spacing
-    world.nn = {51,26,1};           // number of cells
+    world.nn = {161,26,1};           // number of cells
 	
 	int ni = world.nn[0];
 	int nj = world.nn[1];
 	int nu = ni*nj;
+
+    double L = 2.16*M_PI;   // Domain length
 	
 	// set temporal / spatial constants
+    world.dh[0] = L*1/(ni-1);
 	double dx = world.dh[0];    // x spacing
 	double dy = world.dh[1];    // y spacing
-    double dt = 1e-3;           // time step
-	int nt = 35001;			// number of timesteps
+    double dt = 1e-4;           // time step
+	int nt = 350001;			// number of timesteps
 
     // set physical constants
-    double L = 2*M_PI;
+    //double L = 2*M_PI;
     double q = 1.0;
     double alpha = 0.3;
     double u_c = 1.1;
-    double s = 3.5;
+    double s = 4.5;
     double k0 = 1;
-    double eps = 0.15;
+    double eps = 0.8;
     double r = 5;
     double nu1 = 0.0075;
     double nu2 = 0.0075;
-    double u_p = 0.65;
+    double u_p = 0.8;
 
     //************** END INITIALIZATION **************//
 
@@ -74,8 +77,8 @@ int main() {
     for (int j = 0; j < nj; j++) {
         for (int i = 0; i < ni; i++) {
             int n = j*ni + i;
-            u[n] = 1.5*pow((1/cosh(8*(i*dx-1))),2);
-            lambda[n] = 0.1;
+            u[n] = 1.5*pow((1/cosh(1*(i*dx-1))),20);
+            lambda[n] = 0.5;
         }
     }
 
@@ -134,7 +137,7 @@ int main() {
         }
 
         // plot results every 100 time steps
-		if (t%100==0) { cout<<t<<endl; saveVTI(t,world,u);}
+		if (t%1000==0) { cout<<t<<endl; saveVTI(t/10,world,u);}
     }
     
 
